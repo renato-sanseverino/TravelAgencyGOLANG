@@ -1,0 +1,8 @@
+prisma/db
+.env
+
+# monorepo setup:
+
+# golang/.env
+# golang/prisma/db
+# react/node_modules

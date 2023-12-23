@@ -1,0 +1,37 @@
+[
+    {
+        "id" : 1,
+        "destination" : "São Paulo",
+        "departure" : "2023-12-20T00:00:00Z",
+        "arrival" : null,
+        "transport_kind" : "bus"
+    },
+    {
+        "id" : 2,
+        "destination" : "Belo Horizonte",
+        "departure" : "2023-12-20T00:00:00Z",
+        "arrival" : null,
+        "transport_kind" : "bus"
+    },
+    {
+        "id" : 3,
+        "destination" : "Recife",
+        "departure" : "2023-12-20T00:00:00Z",
+        "arrival" : null,
+        "transport_kind" : "plane"
+    },
+    {
+        "id" : 4,
+        "destination" : "Curitiba",
+        "departure" : "2023-12-20T00:00:00Z",
+        "arrival" : null,
+        "transport_kind" : "bus"
+    },
+    {
+        "id" : 5,
+        "destination" : "Salvador",
+        "departure" : "2023-12-20T00:00:00Z",
+        "arrival" : null,
+        "transport_kind" : "bus"
+    }
+]

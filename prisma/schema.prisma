@@ -1,0 +1,79 @@
+generator db {
+  provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model accommodations {
+  id             Int              @id @default(autoincrement())
+  hotel          String           @db.VarChar(120)
+  guests         Int
+  checkin        DateTime         @db.Date
+  checkout       DateTime?        @db.Date
+  room           Int?
+  travelpackages travelpackages[]
+}
+
+model client {
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(120)
+  address        String?          @db.VarChar(200)
+  occupation     String?          @db.VarChar(120)
+  birth_date     DateTime         @db.Date
+  email          String           @db.VarChar(80)
+  travelpackages travelpackages[]
+}
+
+model itinerary {
+  id             Int       @id @default(autoincrement())
+  destination    String    @db.VarChar(120)
+  departure      DateTime  @db.Date
+  arrival        DateTime? @db.Date
+  transport_kind String    @db.VarChar(65)
+}
+
+model travelinsurance {
+  id             Int              @id @default(autoincrement())
+  client_id      Int
+  purposeOfTrip  String           @db.VarChar(80)
+  luggage        Decimal?         @db.Decimal(10, 2)
+  medical_cover  Decimal?         @db.Decimal(10, 2)
+  price_total    Decimal          @db.Decimal(10, 2)
+  travelpackages travelpackages[]
+}
+
+model travelpackages {
+  id               Int              @id @default(autoincrement())
+  description      String           @db.VarChar(120)
+  client_id        Int
+  country          String           @db.VarChar(80)
+  city             String           @db.VarChar(80)
+  accommodation_id Int?
+  insurance_id     Int?
+  price_total      Decimal          @db.Decimal(10, 2)
+  accommodations   accommodations?  @relation(fields: [accommodation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tour_accommodation")
+  client           client           @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tour_client")
+  travelinsurance  travelinsurance? @relation(fields: [insurance_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tour_insurance")
+
+  @@index([accommodation_id], map: "fk_tour_accommodation_idx")
+  @@index([client_id], map: "fk_tour_client_idx")
+  @@index([insurance_id], map: "fk_tour_insurance_idx")
+}
+
+model eventtickets {
+  id          Int     @id @default(autoincrement())
+  client_id   Int
+  description String  @db.VarChar(80)
+  location    String? @db.VarChar(80)
+  price       Decimal @db.Decimal(10, 2)
+}
+
+model guidedtours {
+  id           Int      @id @default(autoincrement())
+  description  String   @db.VarChar(120)
+  date         DateTime @db.Date
+  participants Int
+}
