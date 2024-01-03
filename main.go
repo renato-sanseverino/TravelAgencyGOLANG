@@ -28,6 +28,7 @@ func main() {
 	rGroup.POST("/clients", handlers.PostClient)
 	rGroup.PATCH("/clients/:id", handlers.PatchClient)
 	rGroup.DELETE("/clients/:id", handlers.DeleteClient)
+	rGroup.POST("/hotels", handlers.PostAccommodation)
 
 	router.Use(cors.Default())
 	router.Run(":8080") // listen and serve on 0.0.0.0:8080
