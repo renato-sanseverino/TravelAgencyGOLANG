@@ -5,13 +5,13 @@ import (
 	"travelagency/src/utils"
 )
 
-type Accommodation struct {
+type Accommodation struct { // Anotations para o GIN FRAMEWORK, domain perdeu sua pureza
 	ID       int
-	Hotel    string
-	Guests   int
-	Checkin  time.Time
-	Checkout *time.Time
-	Room     *int
+	Hotel    string         `json:"hotel" binding:"required"`
+	Guests   int            `json:"guests" binding:"required"`
+	Checkin  time.Time      `json:"checkin" binding:"required"`
+	Checkout *time.Time     `json:"checkout"`
+	Room     *int           `json:"room"`
 	Charges  []int
 }
 

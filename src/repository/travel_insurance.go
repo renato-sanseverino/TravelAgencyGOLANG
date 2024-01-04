@@ -19,7 +19,7 @@ func NewInsuranceRepository(connPool *pgxpool.Pool) IRepository[domain.Insurance
 
 func (ir *InsuranceRepository) Insert(ctx context.Context, i domain.Insurance) error {
 
-	_, err := ir.pool.Exec(ctx, "INSERT INTO travelinsurance (client_id, purposeOfTrip, luggage, medical_cover, price_total) VALUES ($1, $2, $3, $4, $5)",
+	_, err := ir.pool.Exec(ctx, "INSERT INTO travelinsurance (client_id, \"purposeOfTrip\", luggage, medical_cover, price_total) VALUES ($1, $2, $3, $4, $5)",
 		i.ClientID,
 		i.PurposeOfTrip,
 		i.Luggage,

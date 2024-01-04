@@ -2,8 +2,10 @@ package utils;
 
 import (
 	"net/http"
+	"context"
 	"travelagency/prisma/db"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 // TODO:  verficar se o prisma trabalha com Pool de Conexões
@@ -15,4 +17,24 @@ func GetPrisma(c *gin.Context) *db.PrismaClient {
 	}
 
 	return client
+}
+
+func GetPool(databaseURL string) *pgxpool.Pool {
+    config, err := pgxpool.ParseConfig(databaseURL)
+    if err != nil {
+		panic(err)
+    }
+    pool, err := pgxpool.NewWithConfig(context.Background(), config)
+    if err != nil {
+		panic(err)
+    }
+
+	return pool;
+}
+
+func AppMiddleware(pool *pgxpool.Pool) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        c.Set("pool", pool)
+        c.Next()
+    }
 }
