@@ -2,7 +2,7 @@ package domain
 
 import (
 	"travelagency/src/utils"
-
+	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 )
 
@@ -10,17 +10,17 @@ import (
 type Decimal = decimal.Decimal
 
 type Insurance struct {
-	ID            int      // Anotations para o GIN FRAMEWORK
-	ClientID      int      `json:"client_id" binding:"required"`
-	PurposeOfTrip string   `json:"purposeOfTrip" binding:"required"` // campo está errado no banco
-	Luggage       *Decimal `json:"luggage"`
-	MedicalCover  *Decimal `json:"medical_cover"`
-	PriceTotal    Decimal  `json:"price_total" binding:"required"`
+	ID            uuid.UUID  // Anotations para o GIN FRAMEWORK
+	ClientID      uuid.UUID  `json:"client_id" binding:"required"`
+	PurposeOfTrip string     `json:"purpose_of_trip" binding:"required"` // campo está errado no banco, fora do padrão dos outros campos
+	Luggage       *Decimal   `json:"luggage"`
+	MedicalCover  *Decimal   `json:"medical_cover"`
+	PriceTotal    Decimal    `json:"price_total" binding:"required"`
 }
 
-func NewInsurance(clientID int, purposeOfTrip string, luggage Decimal, medicalCover Decimal, priceTotal Decimal) (*Insurance, error) {
+func NewInsurance(clientID uuid.UUID, purposeOfTrip string, luggage Decimal, medicalCover Decimal, priceTotal Decimal) (*Insurance, error) {
 	obj := &Insurance{
-		ID:            9999, // gerar uuid
+		ID:            uuid.New(),  // evitar a duplicação de registros com UUID
 		ClientID:      clientID,
 		PurposeOfTrip: purposeOfTrip,
 		Luggage:       &luggage,
@@ -36,7 +36,7 @@ func NewInsurance(clientID int, purposeOfTrip string, luggage Decimal, medicalCo
 }
 
 func (obj *Insurance) Validate() error {
-	if obj.ClientID == 0 || obj.PurposeOfTrip == "" || obj.PriceTotal.IsZero() {
+	if obj.PurposeOfTrip == "" || obj.PriceTotal.IsZero() {
 		return utils.ValidationError
 	}
 	return nil

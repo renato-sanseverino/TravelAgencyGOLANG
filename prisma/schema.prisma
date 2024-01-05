@@ -8,7 +8,7 @@ datasource db {
 }
 
 model accommodations {
-  id             Int              @id @default(autoincrement())
+  id             String           @id @db.Uuid
   hotel          String           @db.VarChar(120)
   guests         Int
   checkin        DateTime         @db.Date
@@ -18,7 +18,7 @@ model accommodations {
 }
 
 model client {
-  id             Int              @id @default(autoincrement())
+  id             String           @id @db.Uuid
   name           String           @db.VarChar(120)
   address        String?          @db.VarChar(200)
   occupation     String?          @db.VarChar(120)
@@ -28,7 +28,7 @@ model client {
 }
 
 model itinerary {
-  id             Int       @id @default(autoincrement())
+  id             String    @id @db.Uuid
   destination    String    @db.VarChar(120)
   departure      DateTime  @db.Date
   arrival        DateTime? @db.Date
@@ -36,8 +36,8 @@ model itinerary {
 }
 
 model travelinsurance {
-  id             Int              @id @default(autoincrement())
-  client_id      Int
+  id             String           @id @db.Uuid
+  client_id      String           @db.Uuid
   purposeOfTrip  String           @db.VarChar(80)
   luggage        Decimal?         @db.Decimal(10, 2)
   medical_cover  Decimal?         @db.Decimal(10, 2)
@@ -46,33 +46,29 @@ model travelinsurance {
 }
 
 model travelpackages {
-  id               Int              @id @default(autoincrement())
+  id               String           @id @db.Uuid
   description      String           @db.VarChar(120)
-  client_id        Int
+  client_id        String           @db.Uuid
   country          String           @db.VarChar(80)
   city             String           @db.VarChar(80)
-  accommodation_id Int?
-  insurance_id     Int?
+  accommodation_id String?          @db.Uuid
+  insurance_id     String?          @db.Uuid
   price_total      Decimal          @db.Decimal(10, 2)
   accommodations   accommodations?  @relation(fields: [accommodation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tour_accommodation")
   client           client           @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tour_client")
   travelinsurance  travelinsurance? @relation(fields: [insurance_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tour_insurance")
-
-  @@index([accommodation_id], map: "fk_tour_accommodation_idx")
-  @@index([client_id], map: "fk_tour_client_idx")
-  @@index([insurance_id], map: "fk_tour_insurance_idx")
 }
 
 model eventtickets {
-  id          Int     @id @default(autoincrement())
-  client_id   Int
+  id          String  @id @db.Uuid
+  client_id   String  @db.Uuid
   description String  @db.VarChar(80)
   location    String? @db.VarChar(80)
   price       Decimal @db.Decimal(10, 2)
 }
 
 model guidedtours {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @db.Uuid
   description  String   @db.VarChar(120)
   date         DateTime @db.Date
   participants Int

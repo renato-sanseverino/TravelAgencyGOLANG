@@ -2,10 +2,10 @@ package handlers;
 
 import (
 	"net/http"
-	"strconv"
 	"travelagency/src/utils"
 	"travelagency/prisma/db"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func GetItineraries(c *gin.Context) {
@@ -33,6 +33,7 @@ func PostItinerary(c *gin.Context) {
 
 	client := utils.GetPrisma(c)
 	insertedItinerary, err := client.Itinerary.CreateOne(
+		db.Itinerary.ID.Set(payload.ID),
 		db.Itinerary.Destination.Set(payload.Destination),
 		db.Itinerary.Departure.Set(payload.Departure),
 		db.Itinerary.TransportKind.Set(payload.TransportKind),
@@ -50,7 +51,7 @@ func PatchItinerary(c *gin.Context) {
 	var payload db.InnerItinerary
 
 	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := uuid.Parse(idParam)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
@@ -64,7 +65,7 @@ func PatchItinerary(c *gin.Context) {
 
 	client := utils.GetPrisma(c)
 	updatedItinerary, err := client.Itinerary.FindUnique(
-		db.Itinerary.ID.Equals(id),
+		db.Itinerary.ID.Equals(id.String()),
 	).Update(
 		db.Itinerary.Destination.Set(payload.Destination),
 		db.Itinerary.Departure.Set(payload.Departure),
@@ -83,7 +84,7 @@ func DeleteItinerary(c *gin.Context) {
 	// TODO: utilizar o flag_removed ao invés de apagar o registro na tabela
 
 	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := uuid.Parse(idParam)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
@@ -91,7 +92,7 @@ func DeleteItinerary(c *gin.Context) {
 
 	client := utils.GetPrisma(c)
 	deletedItinerary, err := client.Itinerary.FindUnique(
-		db.Itinerary.ID.Equals(id),
+		db.Itinerary.ID.Equals(id.String()),
 	).Delete().Exec(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

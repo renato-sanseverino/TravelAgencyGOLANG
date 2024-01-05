@@ -1,11 +1,12 @@
-package handlers;
+package handlers
 
 import (
 	"net/http"
-	"strconv"
-	"travelagency/src/utils"
 	"travelagency/prisma/db"
+	"travelagency/src/utils"
+
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func GetClients(c *gin.Context) {
@@ -33,6 +34,7 @@ func PostClient(c *gin.Context) {
 
 	prismaClient := utils.GetPrisma(c)
 	insertedClient, err := prismaClient.Client.CreateOne(
+		db.Client.ID.Set(payload.ID),
 		db.Client.Name.Set(payload.Name),
 		db.Client.BirthDate.Set(payload.BirthDate),
 		db.Client.Email.Set(payload.Email),
@@ -51,7 +53,7 @@ func PatchClient(c *gin.Context) {
 	var payload db.InnerClient
 
 	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := uuid.Parse(idParam)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
@@ -65,7 +67,7 @@ func PatchClient(c *gin.Context) {
 
 	prismaClient := utils.GetPrisma(c)
 	updatedClient, err := prismaClient.Client.FindUnique(
-		db.Client.ID.Equals(id),
+		db.Client.ID.Equals(id.String()),
 	).Update(
 		db.Client.Name.Set(payload.Name),
 		db.Client.BirthDate.Set(payload.BirthDate),
@@ -85,7 +87,7 @@ func DeleteClient(c *gin.Context) {
 	// TODO: utilizar o flag_removed ao invés de apagar o registro na tabela
 
 	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := uuid.Parse(idParam)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
@@ -93,7 +95,7 @@ func DeleteClient(c *gin.Context) {
 
 	prismaClient := utils.GetPrisma(c)
 	deletedClient, err := prismaClient.Client.FindUnique(
-		db.Client.ID.Equals(id),
+		db.Client.ID.Equals(id.String()),
 	).Delete().Exec(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

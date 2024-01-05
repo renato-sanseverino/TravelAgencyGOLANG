@@ -3,10 +3,11 @@ package domain
 import (
 	"time"
 	"travelagency/src/utils"
+	"github.com/google/uuid"
 )
 
 type Accommodation struct { // Anotations para o GIN FRAMEWORK, domain perdeu sua pureza
-	ID       int
+	ID       uuid.UUID
 	Hotel    string         `json:"hotel" binding:"required"`
 	Guests   int            `json:"guests" binding:"required"`
 	Checkin  time.Time      `json:"checkin" binding:"required"`
@@ -17,7 +18,7 @@ type Accommodation struct { // Anotations para o GIN FRAMEWORK, domain perdeu su
 
 func NewAccommodation(hotel string, guests int, checkin time.Time, checkout time.Time, room int) (*Accommodation, error){
 	obj := &Accommodation{
-		ID:     9999,   // gerar uuid
+		ID:     uuid.New(),  // evitar a duplicação de registros com UUID
 		Guests: guests,
 		Checkin: time.Now(),
 		Checkout: &checkout,

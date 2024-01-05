@@ -19,7 +19,8 @@ func NewAccommodationRepository(connPool *pgxpool.Pool) IRepository[domain.Accom
 
 func (ar *AccommodationRepository) Insert(ctx context.Context, a domain.Accommodation) error {
 
-	_, err := ar.pool.Exec(ctx, "INSERT INTO accommodations (hotel, guests, checkin, checkout, room) VALUES ($1, $2, $3, $4, $5)",
+	_, err := ar.pool.Exec(ctx, "INSERT INTO accommodations (id, hotel, guests, checkin, checkout, room) VALUES ($1, $2, $3, $4, $5, $6)",
+		a.ID,
 		a.Hotel,
 		a.Guests,
 		a.Checkin,
@@ -30,7 +31,7 @@ func (ar *AccommodationRepository) Insert(ctx context.Context, a domain.Accommod
 	if err != nil {
 		return err
 	}
-	return nil
+	return nil // TODO: retornar o registro inserido, mudar na interface tambem
 }
 
 func (ar *AccommodationRepository) GetByID(ctx context.Context, id int) (*domain.Accommodation, error) {
