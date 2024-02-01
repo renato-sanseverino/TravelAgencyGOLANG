@@ -22,3 +22,7 @@ Agência de viagens utilizando Golang and React
     > go run main.go
 - Follow the link:
     > http://localhost:8080/api/itineraries
+
+## Deploy the project to a Kubernetes cluster
+- Run
+    > kubectl apply -f deploy/travelagency.yaml

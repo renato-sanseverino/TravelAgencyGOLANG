@@ -1,7 +1,7 @@
 CREATE DATABASE travel_agency;
 \c travel_agency
 
-CREATE TABLE public.accommodations (
+CREATE TABLE IF NOT EXISTS public.accommodations (
 	id uuid NOT NULL,
 	hotel varchar(120) NOT NULL,
 	guests integer NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE public.accommodations (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE public.travelinsurance (
+CREATE TABLE IF NOT EXISTS public.travelinsurance (
 	id uuid NOT NULL,
 	client_id uuid NOT NULL,
 	"purposeOfTrip" varchar(80) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE public.travelinsurance (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE public.itinerary (
+CREATE TABLE IF NOT EXISTS public.itinerary (
 	id uuid NOT NULL,
 	destination varchar(120) NOT NULL,
 	departure date NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE public.itinerary (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE public.client (
+CREATE TABLE IF NOT EXISTS public.client (
 	id uuid NOT NULL,
 	"name" varchar(120) NOT NULL,
 	"address" varchar(200) NULL,
@@ -40,7 +40,7 @@ CREATE TABLE public.client (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE public.travelpackages (
+CREATE TABLE IF NOT EXISTS public.travelpackages (
 	id uuid NOT NULL,
 	description varchar(120) NOT NULL,
 	client_id uuid NOT NULL,
@@ -65,7 +65,7 @@ ALTER TABLE public.travelpackages
 		FOREIGN KEY (client_id) REFERENCES public.client(id);
 
 
-CREATE TABLE public.eventtickets (
+CREATE TABLE IF NOT EXISTS public.eventtickets (
 	id uuid NOT NULL,
 	client_id uuid NOT NULL,
 	description varchar(80) NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE public.eventtickets (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE public.guidedtours (
+CREATE TABLE IF NOT EXISTS public.guidedtours (
 	id uuid NOT NULL,
 	description varchar(120) NOT NULL,
 	"date" date NOT NULL,
